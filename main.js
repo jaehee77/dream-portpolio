@@ -17,6 +17,10 @@ document.addEventListener('scroll', () => {
 })
 
 
+const sectionIds = ['#home', '#about', '#skills', '#work', '#testimonials', '#contact'];
+const sections = sectionIds.map(id => document.querySelector(id));
+const navItems = sectionIds.map(id => document.querySelector(`[data-link="${id}"]`));
+
 // Handle scrolling when tapping on the navbar menu
 const navbarMenu = document.querySelector('.navbar__menu');
 
@@ -29,6 +33,7 @@ navbarMenu.addEventListener('click', (evt) => {
   // console.log(link);
   navbarMenu.classList.remove('open');
   scrollIntoView(link);
+  selectNavItem(target);
 })
 
 const homeContactBtn = document.querySelector('.home__contact');
@@ -41,6 +46,7 @@ function scrollIntoView(selector) {
   scrollTo.scrollIntoView({
     behavior: 'smooth',
   })
+  selectNavItem(navItems[sectionIds.indexOf(selector)])
 }
 
 // scrolling opacity
@@ -52,7 +58,7 @@ function scrollIntoView(selector) {
 const home = document.querySelector('.home__container');
 const homeHeight = home.getBoundingClientRect().height;
 
-document.addEventListener('scroll', ()=> {
+document.addEventListener('wheel', ()=> {
   // console.log(homeHeight, window.scrollY);
 
   // console.log(1 - window.scrollY / homeHeight);
@@ -123,3 +129,71 @@ navberToggleBtn.addEventListener('click', () => {
 })
 
 
+// 1. 모든 섹션 요소들을 가지고 온다.
+// 2. IntersectionObserver 를 이용해서 모든 섹션들을 관찰한다.
+// 3. 보여지는 섹션에 해당하는 메뉴 아이템을 활성화 시킨다.
+
+// const sectionIds = ['#home', '#about', '#skills', '#work', '#testimonials', '#contact'];
+
+// const sections = sectionIds.map(id => document.querySelector(id));
+// console.log(sections)
+// const navItems = sectionIds.map(id => document.querySelector(`[data-link="${id}"]`));
+// console.log(navItems);
+
+const observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.3,
+};
+
+let selectedNavIndex = 0;
+let selectedNavItem = navItems[0];
+
+function selectNavItem(selected) {
+  selectedNavItem.classList.remove('active');
+  selectedNavItem = selected;
+  selectedNavItem.classList.add('active');
+}
+
+const observerCallback = (entries, observer) => {
+  entries.forEach(entry => {
+    // console.log(entry);
+    // console.log(entry.target);
+    // console.log(entry.target, entry.isIntersecting);
+    
+    if(!entry.isIntersecting && entry.intersectionRatio > 0) { // threshold: 0.3 의 뷰포트에서 사라진 것을 체크
+      // console.log(entry.target, entry.isIntersecting);
+      // console.log(entry.target);
+      const index = sectionIds.indexOf(`#${entry.target.id}`);
+      // console.log(index, entry.target.id);
+      // console.log(entry.boundingClientRect);
+
+
+      // 아래로 스크롤하면(요소는 위로 없어짐) 다음 인덱스를 보여주고
+      // 즉, y 좌표가 - 마이너스라면 인덱스 +1
+      // 위로 스크롤하면(요소는 아래로 없어짐) 이전 인덱스를 보여준다
+      // 즉, y 좌표가 플러스라면 인덱스를 -1
+
+      // 스크롤링이 아래로 되어서 페이지가 올라옴(즉, 뷰포트에서 사라지는 타켓요소의 y좌표가 마이너스)
+      if(entry.boundingClientRect.y < 0) {
+        selectedNavIndex = index + 1;
+      } else {
+        selectedNavIndex = index - 1;
+      }
+      
+    }
+
+
+  })
+}
+const observer = new IntersectionObserver(observerCallback, observerOptions);
+sections.forEach(section => observer.observe(section));
+
+window.addEventListener('scroll', () => {
+  if(window.scrollY === 0) {
+    selectedNavIndex = 0;
+  } else if(window.scrollY + window.innerHeight === document.body.clientHeight) {
+    selectedNavIndex = navItems.length - 1;
+  }
+  selectNavItem(navItems[selectedNavIndex]);
+})

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .timer-wrap {
+            text-align: center;
+        }
+        #d-day-message {
+            margin-top: 10px;
+        }
+        .input-area {margin: 10px 0 20px;}
+        .input-area input { width: 60px;height: 20px;line-height: 1;}
+    </style>
+
+</head>
+<body>
+    
+
+    <div class="timer-wrap">
+        <h1>D-Day</h1>
+        <div id="d-day-container">
+            <span id="days">0</span> 일
+            <span id="hours">0</span> 시간
+            <span id="min">0</span> 분
+            <span id="sec">0</span> 초
+        </div>
+        <div id="d-day-message"></div>
+        <div class="input-area">
+            <input type="text" id="target-year-input" maxlength="4">-
+            <input type="text" id="target-month-input" maxlength="2">-
+            <input type="text" id="target-date-input" maxlength="2">
+        </div>
+        <button type="button" onclick="starter()">카운트다운 시작</button>
+        <button type="button" onclick="resetTimer()">타이머 초기화</button>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <h1>Web Storage</h1>
+    <h2>Session Storage</h2>
+    <ul>
+        <li>Key-value 형태로 저장</li>
+        <li>로컬 환경에 데이터를 저장</li>
+        <li>세션 단위로 구분되며 활용
+            <ul>
+                <li>
+                    세션 : 사용자가 브라우저를 통해 웹 페이지에 접속한 시점부터, 
+                    해당 웹페이지 접속을 종료하는 시점까지를 의미하는 단위
+                </li>
+                <li>즉, 사용자의 웹페이지 접속 상태에 따른 단위를 말한다.</li>
+            </ul>
+
+        </li>
+        <li>브라우저, 탭을 종료하면 데이터 영구 삭제</li>
+    </ul>
+
+    <br>
+
+    <h2>Local Storage</h2>
+    <ul>
+        <li>Key-value 형태로 저장</li>
+        <li>로컬 환경에 데이터를 저장</li>
+        <li>도메인 단위로 구분되며 활용
+            <ul>
+                <li>
+                    http://localhost:5500/user <br>
+                    /user 인 엔드포인트가 달라져도 같은 도메인이면 데이터를 공유할 수 있음
+                </li>
+                <li>http://localhost:5500/category</li>
+            </ul>
+        </li>
+        <li>브라우저 자체를 종료해도 데이터가 존재</li>
+    </ul>
+
+
+    <script src="./js/date-timer.js"></script>
+
+</body>
+</html>
