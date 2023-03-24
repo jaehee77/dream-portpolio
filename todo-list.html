@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-    <script src="js/todo-list.js"></script>
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="css/todo-list.css">
+    <script src="js/todo-list.js" defer></script>
 </head>
 <body>
 
 
-    
+    <h1>ToDo</h1>
+    <div class="todo-container">
+        <input type="text" id="todo-input" onkeydown="keyCodeCheck()" />
+
+        <ul id="todo-list">
+            <!-- <li>할일</li> -->
+        </ul>
+
+    </div>
+    <div class="delete-btn-wrapper">
+        <button onclick="deleteAll()">전체 삭제</button>
+    </div>
 
 
     
